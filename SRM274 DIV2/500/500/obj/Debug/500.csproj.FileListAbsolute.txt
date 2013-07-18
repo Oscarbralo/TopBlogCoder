@@ -1,7 +1,0 @@
-C:\VS Projects\TopCoder\SRM274 DIV2\500\500\bin\Debug\500.exe.config
-C:\VS Projects\TopCoder\SRM274 DIV2\500\500\bin\Debug\500.exe
-C:\VS Projects\TopCoder\SRM274 DIV2\500\500\bin\Debug\500.pdb
-C:\VS Projects\TopCoder\SRM274 DIV2\500\500\obj\Debug\500.csprojResolveAssemblyReference.cache
-C:\VS Projects\TopCoder\SRM274 DIV2\500\500\obj\Debug\500.exe
-C:\VS Projects\TopCoder\SRM274 DIV2\500\500\obj\Debug\500.pdb
-C:\VS Projects\TopCoder\SRM274 DIV2\500\500\bin\Debug\Stack_List.dll
