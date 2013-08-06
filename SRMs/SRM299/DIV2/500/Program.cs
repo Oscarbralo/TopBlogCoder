@@ -10,17 +10,20 @@ namespace _500
     {
         static void Main(string[] args)
         {
-            X x = new X();
+            Projections x = new Projections();
             Console.WriteLine();
             Console.ReadLine();
         }
     }
 
-    public class X
+    public class Projections
     {
-        public string x(string x)
+        public int[] count(string front, string right)
         {
-
+            int colums = front.Count(x => x == 'x');
+            int rows = right.Count(x => x == 'x');
+            int[] result = { Math.Max(colums, rows), colums * rows};
+            return result;
         }
     }
 }
