@@ -11,9 +11,7 @@ namespace IntroToTutorialChallenges
         {
             string number = Console.ReadLine();
             int length = int.Parse(Console.ReadLine());
-            List<string> array = Console.ReadLine().Split(' ').ToList();
-            int result = array.IndexOf(number);
-            Console.WriteLine(result);
+            Console.WriteLine(Console.ReadLine().Split(' ').ToList().IndexOf(number));
             Console.ReadLine();
         }
     }
