@@ -30,56 +30,37 @@ public:
 		int current = 0;
 		string middle;
 		string left;
-		for(int i = 0; i < message.length(); i++)
+		int index = 0;
+		while(index != 2)
 		{
-			stringstream l;
-			l << result[0][i];
-			stringstream m;
-			m << result[0][i + 1];
-			middle = message[i];
-			int diff = atoi(middle.c_str()) - (atoi(l.str().c_str()) + atoi(m.str().c_str()));
-			if(i == message.length() - 1)
+			for(int i = 0; i < message.length(); i++)
 			{
-				if(diff != 0)
-					result[0] = "NONE";
-				break;
+				stringstream l;
+				l << result[index][i];
+				stringstream m;
+				m << result[index][i + 1];
+				middle = message[i];
+				int diff = atoi(middle.c_str()) - (atoi(l.str().c_str()) + atoi(m.str().c_str()));
+				if(i == message.length() - 1)
+				{
+					if(diff != 0)
+						result[index] = "NONE";
+					break;
+				}
+				if(diff == 0)
+					result[index] += "0";
+				else if(diff == 1)
+					result[index] += "1";
+				else
+				{
+					result[index] = "NONE";
+					break;
+				}
 			}
-			if(diff == 0)
-				result[0] += "0";
-			else if(diff == 1)
-				result[0] += "1";
-			else
-			{
-				result[0] = "NONE";
-				break;
-			}
+			index++;
 		}
 		if(result[0] != "NONE")
 			result[0].erase(0, 1);
-		for(int i = 0; i < message.length(); i++)
-		{
-			stringstream l;
-			l << result[1][i];
-			stringstream m;
-			m << result[1][i + 1];
-			middle = message[i];
-			int diff = atoi(middle.c_str()) - (atoi(l.str().c_str()) + atoi(m.str().c_str()));
-			if(i == message.length() - 1)
-			{
-				if(diff != 0)
-					result[1] = "NONE";
-				break;
-			}
-			if(diff == 0)
-				result[1] += "0";
-			else if(diff == 1)
-				result[1] += "1";
-			else
-			{
-				result[1] = "NONE";
-				break;
-			}
-		}
 		if(result[1] != "NONE")
 			result[1].erase(0, 1);
 		return result;
