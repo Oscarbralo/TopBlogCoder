@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace _600
 {
@@ -36,28 +32,11 @@ namespace _600
             {
                 for (int b = 1; b < newBoard[a].Length - 1; b++)
                 {
-                    int count = 0;
                     if (newBoard[a][b] == 'B')
                         bombs++;
                     else
                     {
-                        if (newBoard[a - 1][b] == '.')
-                            count++;
-                        if (newBoard[a - 1][b - 1] == '.')
-                            count++;
-                        if (newBoard[a][b - 1] == '.')
-                            count++;
-                        if (newBoard[a + 1][b - 1] == '.')
-                            count++;
-                        if (newBoard[a + 1][b] == '.')
-                            count++;
-                        if (newBoard[a + 1][b + 1] == '.')
-                            count++;
-                        if (newBoard[a][b + 1] == '.')
-                            count++;
-                        if (newBoard[a - 1][b + 1] == '.')
-                            count++;
-                        if (count == 8)
+                        if(check(newBoard, a, b))
                             result++;
                     }
                 }
@@ -65,6 +44,28 @@ namespace _600
             double res = double.Parse(result.ToString()) / (double.Parse(result.ToString()) + double.Parse(bombs.ToString()));
             double r = res * 100.0;
             return r;
+        }
+
+        public bool check(string[] newBoard, int a, int b)
+        {
+            int count = 0;
+            if (newBoard[a - 1][b] == '.')
+                count++;
+            if (newBoard[a - 1][b - 1] == '.')
+                count++;
+            if (newBoard[a][b - 1] == '.')
+                count++;
+            if (newBoard[a + 1][b - 1] == '.')
+                count++;
+            if (newBoard[a + 1][b] == '.')
+                count++;
+            if (newBoard[a + 1][b + 1] == '.')
+                count++;
+            if (newBoard[a][b + 1] == '.')
+                count++;
+            if (newBoard[a - 1][b + 1] == '.')
+                count++;
+            return (count == 8) ? true : false;
         }
     }
 }
