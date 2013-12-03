@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text.RegularExpressions;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace _500
+namespace SRM161
 {
     class Program
     {
         static void Main(string[] args)
         {
             StringTrain x = new StringTrain();
-            string[] a = { "A", "A", "A", "AA" };
-            Console.WriteLine(x.buildTrain(a));
+            string[] cars = { "AAAAA", "AAAAA", "AAAAA" };
+            Console.WriteLine(x.buildTrain(cars));
             Console.ReadLine();
         }
     }
@@ -21,27 +20,26 @@ namespace _500
     {
         public string buildTrain(string[] cars)
         {
-            string res = cars[0];
+            StringBuilder sb = new StringBuilder();
+            sb.Append(cars[0]);
             for (int i = 1; i < cars.Length; i++)
             {
+                if (cars[i].Length == 1) { continue; }
                 for (int a = cars[i].Length - 1; a > 0; a--)
                 {
-                    string temp1 = cars[i].Substring(0, a);
-                    if (temp1 == res) continue;
-                    if (res.EndsWith(cars[i].Substring(0, a)))
+                    if (sb.ToString().EndsWith(cars[i].Substring(0, a)) && sb.ToString() != cars[i].Substring(0, a))
                     {
-                        res += cars[i].Substring(a, cars[i].Length - a);
+                        sb.Append(cars[i].Substring(a, cars[i].Length - a));
                         break;
                     }
                 }
             }
-            string result = "";
-            for (int i = res.Length - 1; i >= 0; i--)
-            {
-                if (!result.Contains(res[i].ToString()))
-                    result = result.Insert(0, res[i].ToString());
-            }
-            return res.Length + " " + result;
+            int len = sb.Length;
+            StringBuilder result = new StringBuilder();
+            for (int b = sb.Length - 1; b >= 0; b--)
+                if (!result.ToString().Contains(sb[b].ToString()))
+                    result = result.Insert(0, sb[b].ToString());
+            return len.ToString() + " " + result;
         }
     }
 }
