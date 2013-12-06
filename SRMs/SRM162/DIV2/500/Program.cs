@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace _500
 {
@@ -11,9 +11,9 @@ namespace _500
         static void Main(string[] args)
         {
             PaperFold x = new PaperFold();
-            int[] a = { 8, 11 };
-            int[] b = { 6, 10 };
-            Console.WriteLine(x.numFolds(a, b));
+            int[] a = { 2528, 3911 };
+            int[] b = { 4079, 639 };
+            Console.WriteLine(x.numFolds(a,b));
             Console.ReadLine();
         }
     }
@@ -22,74 +22,47 @@ namespace _500
     {
         public int numFolds(int[] paper, int[] box)
         {
-            int res = 0;
-            double[] pape = new double[2];
-            double[] bo = new double[2];
-            for (int i = 0; i < paper.Length; i++)
+            int result = 0;
+            bool finish = false;
+            double[] p = {(double)paper[0], (double)paper[1]};
+            double[] b = {(double)box[0], (double)box[1]};
+            for (int i = 0; i <= 8; i++)
             {
-                pape[i] = (double)paper[i];
-                bo[i] = (double)box[i];
-            }
-            for (int i = 0; i < 9; i++)
-            {
-                if (pape[0] > pape[1])
+                if ((p[0] <= b[0] && p[1] <= b[1]) || (p[0] <= b[1] && p[1] <= b[0]))
                 {
-                    if (pape[0] <= bo[0])
-                    {
-                        if (pape[1] <= bo[1])
-                            return res;
-                        else
-                        {
-                            pape[1] /= 2;
-                            res++;
-                        }
-                    }
-                    else if(pape[0] <= bo[1])
-                    {
-                        if (pape[1] <= bo[0])
-                            return res;
-                        else
-                        {
-                            pape[1] /= 2;
-                            res++;
-                        }
-                    }
+                    finish = true;
+                    break;
+                }
+                if (p[0] > p[1])
+                {
+                    if (p[0] <= b[0] || p[0] <= b[1])
+                        p[1] /= 2;
+                    else if (p[1] <= b[1] || p[1] <= b[1])
+                        p[0] /= 2;
                     else
-                    {
-                        pape[0] /= 2;
-                        res++;
-                    }
+                        if (p[0] >= p[1])
+                            p[0] /= 2;
+                        else
+                            p[1] /= 2;
                 }
                 else
                 {
-                    if (pape[1] <= bo[0])
-                    {
-                        if (pape[0] <= bo[1])
-                            return res;
-                        else
-                        {
-                            pape[0] /= 2;
-                            res++;
-                        }
-                    }
-                    else if (pape[1] <= bo[1])
-                    {
-                        if (pape[0] <= bo[0])
-                            return res;
-                        else
-                        {
-                            pape[0] /= 2;
-                            res++;
-                        }
-                    }
+                    if (p[1] <= b[0] || p[1] <= b[1])
+                        p[0] /= 2;
+                    else if (p[0] <= b[0] || p[0] <= b[1])
+                        p[1] /= 2;
                     else
-                    {
-                        pape[1] /= 2;
-                        res++;
-                    }
+                        if (p[0] >= p[1])
+                            p[0] /= 2;
+                        else
+                            p[1] /= 2;
                 }
+                result++;
             }
-            return -1;
+            if(finish)
+                return result;
+            else
+                return -1;
         }
     }
 }
