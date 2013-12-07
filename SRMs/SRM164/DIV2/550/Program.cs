@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace _550
 {
@@ -11,8 +11,8 @@ namespace _550
         static void Main(string[] args)
         {
             PartySeats x = new PartySeats();
-            string[] a = { "AM girl", "ROB boy", "JIM boy", "AM girl", "DAVE boy", "JO girl", "DAVE boy", "JO girl" };
-            Console.WriteLine(x.seating(a));
+            string[] names = { "ABC girl", "BXC boy", "ALJS girl", "SDF boy", "AEEEE boy", "ABEEE boy" };
+            Console.WriteLine(string.Join(" ", x.seating(names)));
             Console.ReadLine();
         }
     }
@@ -21,51 +21,64 @@ namespace _550
     {
         public string[] seating(string[] attendees)
         {
-            string[] res = new string[0];
-            if (attendees.Length % 4 != 0)
-                return res;
-            List<string> boys = new List<string>();
-            List<string> girls = new List<string>();
-            List<string> result = new List<string>();
+            List<string> listBoys = new List<string>();
+            List<string> listGirls = new List<string>();
             for (int i = 0; i < attendees.Length; i++)
-            {
-                if (attendees[i].Split(' ')[1].StartsWith("b"))
-                    boys.Add(attendees[i].Split(' ')[0]);
-                if (attendees[i].Split(' ')[1].StartsWith("g"))
-                    girls.Add(attendees[i].Split(' ')[0]);
-            }
-            if (boys.Count != girls.Count)
-                return res;
-            result.Add("HOST");
-            bool x = true;
-            string[] g = girls.ToArray();
-            string[] b = boys.ToArray();
-            Array.Sort(g);
+                if (attendees[i].Contains("girl"))
+                    listGirls.Add(attendees[i]);
+                else
+                    listBoys.Add(attendees[i]);
+            string[] b = listBoys.ToArray();
+            string[] g = listGirls.ToArray();
             Array.Sort(b);
-            int index = 0;
-            int changes = 0;
-            for (int i = 0; i < attendees.Length; i++)
+            Array.Sort(g);
+            if ((b.Length < 2 || g.Length < 2) || (b.Length % 2 == 1 || g.Length % 2 == 1) || (b.Length != g.Length))
+                return new string[0];
+            string[] result = new string[b.Length + g.Length + 2];
+            int tempB = 0;
+            int tempG = 0;
+            bool secondPart = false;
+            for (int a = 0; a < b.Length + g.Length + 2; a++)
             {
-                if (i == attendees.Length / 2)
+                if (a == 0)
                 {
-                    result.Add("HOSTESS");
-                    x = false;
+                    result[0] = "HOST";
+                    continue;
                 }
-                if (x == true)
+                if (a == (b.Length + g.Length + 2) / 2)
                 {
-                    x = false;
-                    result.Add(g[index]);
+                    result[a] = "HOSTESS";
+                    secondPart = true;
+                    continue;
+                }
+                if (!secondPart)
+                {
+                    if (tempB == tempG)
+                    {
+                        result[a] = g[tempG].Split(' ')[0];
+                        tempG++;
+                    }
+                    else
+                    {
+                        result[a] = b[tempB].Split(' ')[0];
+                        tempB++;
+                    }
                 }
                 else
                 {
-                    x = true;
-                    result.Add(b[index]);
+                    if (tempB == tempG)
+                    {
+                        result[a] = b[tempB].Split(' ')[0];
+                        tempB++;
+                    }
+                    else
+                    {
+                        result[a] = g[tempG].Split(' ')[0];
+                        tempG++;
+                    }
                 }
-                changes++;
-                if (changes % 2 == 0)
-                    index++;
             }
-            return result.ToArray();
+            return result;
         }
     }
 }
