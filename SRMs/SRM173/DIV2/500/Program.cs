@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace _500
 {
@@ -21,60 +20,44 @@ namespace _500
     {
         public string getSequence(string word)
         {
-            string res = "";
-            string pattern = @"[AEIOUaeiou]";
-            List<int> list = new List<int>();
-            Regex r = new Regex(pattern);
-            foreach (Match m in r.Matches(word))
-                list.Add(m.Index);
-            bool x = false;
+            Regex r = new Regex("[aeiouAEIOUyY]");
             for (int i = 0; i < word.Length; i++)
             {
-                if (!list.Contains(i))
+                if (word[i] == 'Y' || word[i] == 'y')
                 {
-                    if (res == "")
-                        res += "C";
-                    else
+                    if (i == 0)
                     {
-                        if (word[i] == 'y' || word[i] == 'Y')
+                        if (word[i] == 'Y' || word[i] == 'y')
                         {
-                            if (list.Contains(i - 1))
-                            {
-                                if (res[res.Length - 1] != 'C')
-                                    res += "C";
-                            }
-                            else
-                            {
-                                if (res[res.Length - 1] != 'V' && x == false)
-                                {
-                                    res += "V";
-                                    x = true;
-                                    continue;
-                                }
-                                else
-                                    res += "C";
-                            }
-                        }
-                        else
-                        {
-                            if (res[res.Length - 1] != 'C')
-                                res += "C";
+                            word = word.Insert(i, "C");
+                            word = word.Remove(i + 1, 1);
                         }
                     }
+                    else
+                    {
+                        if (r.IsMatch(word[i - 1].ToString()))
+                        {
+                            word = word.Insert(i, "C");
+                            word = word.Remove(i + 1, 1);
+                            i--;
+                        }
+                    }
+                }
+            }
+            StringBuilder sb = new StringBuilder(" ");
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (r.IsMatch(word[i].ToString()))
+                {
+                    if (sb[sb.Length - 1] != 'V')
+                        sb.Append("V");
                 }
                 else
-                {
-                    if (res == "")
-                        res += "V";
-                    else
-                    {
-                        if (res[res.Length - 1] != 'V')
-                            res += "V";
-                    }
-                }
-                x = false;
+                    if (sb[sb.Length - 1] != 'C')
+                        sb.Append("C");
             }
-            return res;
+            sb = sb.Remove(0, 1);
+            return sb.ToString();
         }
     }
 }
