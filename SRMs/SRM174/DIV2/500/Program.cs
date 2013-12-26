@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace _500
 {
@@ -11,7 +11,7 @@ namespace _500
         static void Main(string[] args)
         {
             BirthdayOdds x = new BirthdayOdds();
-            Console.WriteLine(x.minPeople(99, 2));
+            Console.WriteLine(x.minPeople(75, 5));
             Console.ReadLine();
         }
     }
@@ -20,22 +20,26 @@ namespace _500
     {
         public int minPeople(int minOdds, int daysInYear)
         {
-            double percen = 100.0 - (double)minOdds;
-            int res = 0;
-            for (int i = daysInYear; i > 0; i--)
+            int result = 0;
+            double days = (double)daysInYear;
+            for (int i = 1; i < 1000; i++)
             {
-                double temp = 100.0;
-                for (int a = daysInYear; a >= i; a--)
-                    temp *= (double)a / (double)daysInYear;
-                if (temp <= percen)
+                double res = 1.0;
+                double x = (double)daysInYear;
+                for (int a = 0; a < i; a++)
                 {
-                    res = daysInYear - i + 1;
+                    res *= x / days;
+                    x--;
+                }
+                res *= 100.0;
+                double temp = 100.0 - res;
+                if (temp > minOdds)
+                {
+                    result = i;
                     break;
                 }
             }
-            if (res == 0)
-                return daysInYear + 1;
-            return res;
+            return result;
         }
     }
 }
