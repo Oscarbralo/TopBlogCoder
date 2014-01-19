@@ -11,22 +11,16 @@ namespace Twins
         static void Main(string[] args)
         {
             int n = int.Parse(Console.ReadLine());
-            IEnumerable<int> coinsUnsorted = Console.ReadLine().Split(' ').Select(x => int.Parse(x)).ToArray<int>();
-            List<int> list = coinsUnsorted.OrderByDescending(x => x).ToList<int>();
-            //if (list.Count == 1)
-            //    Console.WriteLine(1);
-            //else
-            //{
-                for (int i = 1; i <= list.Count; i++)
+            IEnumerable<int> coinsUnsorted = Console.ReadLine().Split(' ').OrderByDescending(x => int.Parse(x)).Select(x => int.Parse(x)).ToArray<int>();
+            for (int i = 1; i <= coinsUnsorted.Count(); i++)
+            {
+                int res = (coinsUnsorted.Select(x => x).Take(i).Sum() > coinsUnsorted.Skip(i).Select(x => x).Sum()) ? i : -1;
+                if (res != -1)
                 {
-                    int res = (list.Select(x => x).Take(i).Sum() > list.Skip(i).Select(x => x).Sum()) ? i : -1;
-                    if (res != -1)
-                    {
-                        Console.WriteLine(res);
-                        break;
-                    }
+                    Console.WriteLine(res);
+                    break;
                 }
-            
+            }
             Console.ReadLine();
         }
     }
