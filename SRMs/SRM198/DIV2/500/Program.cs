@@ -12,8 +12,8 @@ namespace _500
         {
             RedSquare x = new RedSquare();
             int[] a = { 1 };
-            int[] b = { 1};
-            Console.WriteLine(x.countTheEmptyReds(50, 50, a, b));
+            int[] b = { 1 };
+            Console.WriteLine(x.countTheEmptyReds(6, 5, a, b));
             Console.ReadLine();
         }
     }
@@ -25,23 +25,10 @@ namespace _500
             int reds = 0;
             if (maxFile % 2 == 0)
             {
-                for (int i = 1; i <= maxRank; i++)
-                {
-                    if (i % 2 == 1)
-                    {
-                        for (int a = 1; a <= maxFile; a++)
-                        {
-                            reds += (a % 2 == 1) ? 1 : 0;
-                        }
-                    }
-                    else
-                    {
-                        for (int b = 1; b <= maxFile; b++)
-                        {
-                            reds += (b % 2 == 0) ? 1 : 0;
-                        }
-                    }
-                }
+                if(maxRank % 2 == 0)
+                    reds = ((maxFile / 2) * (maxRank / 2)) + ((maxFile / 2) * (maxRank / 2));
+                else
+                    reds = ((maxFile / 2) * ((maxRank / 2) + 1)) + ((maxFile / 2) * (maxRank / 2));
                 for (int i = 0; i < rank.Length; i++)
                 {
                     if (rank[i] % 2 == 1)
@@ -58,23 +45,10 @@ namespace _500
             }
             else
             {
-                for (int i = 1; i <= maxRank; i++)
-                {
-                    if (i % 2 == 1)
-                    {
-                        for (int a = 1; a <= maxFile; a++)
-                        {
-                            reds += (a % 2 == 0) ? 1 : 0;
-                        }
-                    }
-                    else
-                    {
-                        for (int b = 1; b <= maxFile; b++)
-                        {
-                            reds += (b % 2 == 1) ? 1 : 0;
-                        }
-                    }
-                }
+                if(maxRank % 2 == 0)
+                    reds = ((maxFile / 2) * (maxRank / 2)) + (((maxFile / 2) + 1) * (maxRank / 2));
+                else
+                    reds = ((maxFile / 2) * ((maxRank / 2) + 1)) + (((maxFile / 2) + 1) * (maxRank / 2));
                 for (int i = 0; i < rank.Length; i++)
                 {
                     if (rank[i] % 2 == 1)
