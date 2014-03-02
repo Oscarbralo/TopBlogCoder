@@ -1,14 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
-namespace _500
+namespace _400
 {
     class Program
     {
         static void Main(string[] args)
         {
+            Conglutination x = new Conglutination();
+            Console.WriteLine(x.split("10000000000000000000", 1));
+            Console.ReadLine();
         }
     }
 
@@ -16,27 +20,16 @@ namespace _500
     {
         public string split(string conglutination, int expectation)
         {
-            string res = "";
+            string result = "-1";
             for (int i = 1; i < conglutination.Length; i++)
             {
-                string temp1 = conglutination.Substring(0, i);
-                string temp2 = conglutination.Substring(i, conglutination.Length - i);
-                string temp3 = temp2;
-                while (temp3[0] == '0' && temp3.Length > 1)
-                    temp3 = temp3.Remove(0, 1);
-                if (temp1.Length > expectation.ToString().Length)
-                    break;
-                if (temp3.Length > expectation.ToString().Length)
-                    continue;
-                if (long.Parse(temp1) + long.Parse(temp3) == expectation)
-                {
-                    if (temp1 == "0")
-                        continue;
-                    res = temp1 + "+" + temp2;
-                    break;
-                }
+                string left = string.Join("", conglutination.Take(i));
+                string right = string.Join("", conglutination.Skip(i).Take(conglutination.Length - i));
+                if ((left.Length > 18 || right.Length > 18) && (right[0] == '9' || left[0] == '9')) continue;
+                result = (long.Parse(left) + long.Parse(right) == expectation) ? string.Format("{0}+{1}", left, right) : "-1";
+                if (result != "-1") break;
             }
-            return res;
+            return result == "-1" ? string.Empty : result;
         }
     }
 }
