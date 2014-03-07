@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace _500
 {
@@ -9,6 +10,11 @@ namespace _500
     {
         static void Main(string[] args)
         {
+            Decipher x = new Decipher();
+            string[] a = { "RAZVLHAR KNW CNR",
+  "HEA HNFMNSAR NFAK" };
+            Console.WriteLine(x.decipher(a, "EORTPNFHSCDIWG"));
+            Console.ReadLine();
         }
     }
 
@@ -16,69 +22,33 @@ namespace _500
     {
         public string[] decipher(string[] encoded, string frequencyOrder)
         {
-            List<string> abc = new List<string>();
-            List<int> total = new List<int>();
-            List<string> temp = new List<string>();
+            List<string> result = new List<string>();
+            Dictionary<string, int> dic = new Dictionary<string, int>();
             for (int i = 0; i < encoded.Length; i++)
             {
-                for (int a = 0; a < encoded[i].Length; a++)
+                string temp = encoded[i];
+                for (int a = 0; a < temp.Length; a++)
                 {
-                    if (!abc.Contains(encoded[i][a].ToString()) && encoded[i][a] != ' ')
-                    {
-                        abc.Add(encoded[i][a].ToString());
-                        total.Add(1);
-                    }
+                    if (encoded[i][a] == ' ')
+                        continue;
+                    if (!dic.Keys.Contains(temp[a].ToString()))
+                        dic.Add(temp[a].ToString(), 1);
                     else
-                    {
-                        if (encoded[i][a] != ' ')
-                            total[abc.IndexOf(encoded[i][a].ToString())]++;
-                    }
+                        dic[temp[a].ToString()] += 1;
                 }
+                dic = dic.OrderByDescending(x => x.Value).ThenBy(x => x.Key).ToDictionary(x => x.Key, j => j.Value);
+
             }
-            int x = frequencyOrder.Length;
-            string[] temp11 = new string[encoded.Length];
+            List<string> list = dic.Keys.Select(x => x).ToList();
             for (int i = 0; i < encoded.Length; i++)
             {
                 for (int a = 0; a < encoded[i].Length; a++)
-                    temp11[i] += "0";
-            }
-            for (int i = 0; i < x; i++)
-            {
-                int max = 0;
-                for (int a = 0; a < total.Count; a++)
                 {
-                    if (total[a] > max)
-                        max = total[a];
-                }
-                List<string> l1 = new List<string>();
-                for (int b = 0; b < total.Count; b++)
-                {
-                    if (total[b] == max && total[b] != 0)
-                    {
-                        l1.Add(abc[b]);
-                        total[b] = 0;
-                    }
-                }
-                string t2 = "";
-                t2 = frequencyOrder.Substring(0, l1.Count);
-                string[] t4 = l1.ToArray();
-                Array.Sort(t4);
-                frequencyOrder = frequencyOrder.Remove(0, l1.Count);
-                for (int c = 0; c < t4.Length; c++)
-                {
-                    for (int d = 0; d < encoded.Length; d++)
-                    {
-                        for (int e = 0; e < encoded[d].Length; e++)
-                        {
-                            if (temp11[d][e] == '0' && encoded[d][e].ToString() == t4[c])
-                            {
-                                temp11[d] = temp11[d].Insert(e, "1");
-                                temp11[d] = temp11[d].Remove(e + 1, 1);
-                                encoded[d] = encoded[d].Insert(e, t2[c].ToString());
-                                encoded[d] = encoded[d].Remove(e + 1, 1);
-                            }
-                        }
-                    }
+                    int index = list.IndexOf(encoded[i][a].ToString());
+                    if (index == -1)
+                        continue;
+                    encoded[i] = encoded[i].Insert(a, frequencyOrder[index].ToString());
+                    encoded[i] = encoded[i].Remove(a + 1, 1);
                 }
             }
             return encoded;
