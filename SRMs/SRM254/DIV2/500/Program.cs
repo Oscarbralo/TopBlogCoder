@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace _500
 {
@@ -9,6 +10,9 @@ namespace _500
     {
         static void Main(string[] args)
         {
+            ListeningIn x = new ListeningIn();
+            Console.WriteLine(x.probableMatch("cptr", "capture"));
+            Console.ReadLine();
         }
     }
 
@@ -17,22 +21,30 @@ namespace _500
         public string probableMatch(string typed, string phrase)
         {
             if (typed == phrase)
-                return "";
-            for (int a = 0; a < phrase.Length; a++)
+                return string.Empty;
+            if(typed.Length >= phrase.Length)
+                return "UNMATCHED";
+            List<string> phr = phrase.Select(x => x.ToString()).ToList();
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < phr.Count; i++)
             {
-                if (typed.Length < 1)
-                    break;
-                if (phrase[a] == typed[0])
+                if (i == typed.Length)
                 {
-                    typed = typed.Remove(0, 1);
-                    phrase = phrase.Remove(a, 1);
-                    a--;
-                    continue;
+                    result.Append(string.Join("", phr.Skip(i).Take(phr.Count - i).ToArray<string>()));
+                    phr = phr.Take(i).ToList();
+                    break;
+                }
+                if(phr[i] != typed[i].ToString())
+                {
+                    result.Append(phr[i]);
+                    phr.RemoveAt(i);
+                    i--;
                 }
             }
-            if (typed.Length > 0)
+            string r1 = string.Join("", phr.ToArray<string>());
+            if (r1 != typed)
                 return "UNMATCHED";
-            return phrase;
+            return result.ToString();
         }
     }
 }
