@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 class Solution
 {
     static void Main(String[] args)
@@ -8,17 +7,16 @@ class Solution
         int caseNumber = int.Parse(Console.ReadLine());
         for (int i = 0; i < caseNumber; i++)
         {
-            long cases = long.Parse(Console.ReadLine());
-            List<long> list = new List<long>();
-            list.Add(1);
-            long n = list[list.Count - 1];
-            while (n < cases)
+            long number = long.Parse(Console.ReadLine());
+            long last = 1;
+            long n = 1;
+            while (n < number)
             {
-                long temp = list[list.Count - 1];
-                list.Add(n + temp);
+                long temp = last;
+                last = n + temp;
                 n = temp;
             }
-            Console.WriteLine(n == cases ? "IsFibo" : "IsNotFibo");
+            Console.WriteLine(n == number ? "IsFibo" : "IsNotFibo");
         }
     }
 }
