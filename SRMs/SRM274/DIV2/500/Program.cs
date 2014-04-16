@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace _500
 {
@@ -9,6 +10,9 @@ namespace _500
     {
         static void Main(string[] args)
         {
+            PalindromeMaker x = new PalindromeMaker();
+            Console.WriteLine(x.make("ABACABA"));
+            Console.ReadLine();
         }
     }
 
@@ -17,33 +21,32 @@ namespace _500
         public string make(string baseString)
         {
             string abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            int[] abcTotal = new int[abc.Length];
+            int[] times = new int[26];
+            StringBuilder left = new StringBuilder();
+            StringBuilder right = new StringBuilder();
             for (int i = 0; i < baseString.Length; i++)
-                abcTotal[abc.IndexOf(baseString[i].ToString())]++;
-            string begin = "";
-            string end = "";
-            for (int i = 0; i < abcTotal.Length; i++)
+                times[abc.IndexOf(baseString[i])]++;
+            for (int i = 0; i < times.Length; i++)
             {
-                while (abcTotal[i] > 1 && abcTotal[i] != 0)
+                while (times[i] > 1)
                 {
-                    begin += abc[i];
-                    end = end.Insert(0, abc[i].ToString());
-                    abcTotal[i] -= 2;
+                    left.Append(abc[i]);
+                    right.Insert(0, abc[i]);
+                    times[i] -= 2;
                 }
             }
-            for (int i = 0; i < abcTotal.Length; i++)
+            if (left.Length > 0)
             {
-                if (abcTotal[i] != 0)
+                for (int i = 0; i < times.Length; i++)
                 {
-                    begin += abc[i];
-                    break;
+                    if (times[i] > 0)
+                    {
+                        left.Append(abc[i]);
+                        break;
+                    }
                 }
             }
-            bool res = (begin.Length + end.Length == baseString.Length) ? true : false;
-            if (res)
-                return begin + end;
-            else
-                return "";
+            return string.Join("", left, right);
         }
     }
 }
