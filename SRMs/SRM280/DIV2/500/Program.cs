@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace _500
 {
@@ -9,6 +10,9 @@ namespace _500
     {
         static void Main(string[] args)
         {
+            CompletingBrackets x = new CompletingBrackets();
+            Console.WriteLine(x.complete("[["));
+            Console.ReadLine();
         }
     }
 
@@ -16,40 +20,52 @@ namespace _500
     {
         public string complete(string text)
         {
-            string t = text;
-            StringBuilder sb = new StringBuilder(text);
-            sb.Append(".");
-            for (int i = 0; i < sb.Length; i++)
+            List<string> lefts = text.Select(x => x.ToString()).ToList();
+            List<string> rights = text.Select(x => x.ToString()).ToList();
+            for (int i = 0; i < lefts.Count - 1; i++)
             {
-                if (sb[i] == '[' && sb[i + 1] == ']')
+                if (lefts[i] == "[")
                 {
-                    sb.Remove(i, 2);
-                    if (i == 0)
-                        i--;
-                    else
-                        i -= 2;
+                    for (int a = i + 1; a < lefts.Count; a++)
+                    {
+                        if (lefts[a] == "]")
+                        {
+                            lefts.RemoveAt(a);
+                            lefts.RemoveAt(i);
+                            i--;
+                            break;
+                        }
+                    }
                 }
             }
-            if (sb.ToString() == ".")
-                return t;
-            else
+            for (int i = rights.Count - 1; i > 0; i--)
             {
-                int left = 0;
-                int right = 0;
-                for (int i = 0; i < sb.Length; i++)
+                if (rights[i] == "]")
                 {
-                    if (sb[i] == '[')
-                        right++;
-                    else if (sb[i] == '.')
-                        sb.Remove(i, 1);
-                    else
-                        left++;
+                    for (int a = i - 1; a >= 0; a--)
+                    {
+                        if (rights[a] == "[")
+                        {
+                            rights.RemoveAt(i);
+                            rights.RemoveAt(a);
+                            i--;
+                            break;
+                        }
+                    }
                 }
-                sb = new StringBuilder(t);
-                for (int i = 0; i < left; i++)
-                    sb.Insert(0, "[");
-                for (int i = 0; i < right; i++)
-                    sb.Append("]");
+            }
+            int left = lefts.Count(x => x == "[");
+            int right = rights.Count(x => x == "]");
+            StringBuilder sb = new StringBuilder(text);
+            while (left > 0)
+            {
+                sb.Append("]");
+                left--;
+            }
+            while (right > 0)
+            {
+                sb = sb.Insert(0, "[");
+                right--;
             }
             return sb.ToString();
         }
