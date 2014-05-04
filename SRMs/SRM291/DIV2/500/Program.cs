@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace _500
 {
@@ -9,6 +10,13 @@ namespace _500
     {
         static void Main(string[] args)
         {
+            Snowflakes x = new Snowflakes();
+            string[] a = {".",
+ "..",
+ "***",
+ "...."};
+            Console.WriteLine(x.flareOut(a));
+            Console.ReadLine();
         }
     }
 
@@ -16,37 +24,26 @@ namespace _500
     {
         public string[] flareOut(string[] snowflake)
         {
-            string[] temp = new string[snowflake.Length];
-            for (int i = 0; i < snowflake[snowflake.Length - 1].Length; i++)
+            string[] reverse = new string[snowflake.Length * 2];
+            for (int i = 0; i < snowflake.Length; i++)
             {
-                StringBuilder sb = new StringBuilder();
-                for (int a = snowflake.Length - 1; a > i; a--)
+                for (int a = i + 1; a < snowflake.Length; a++)
                 {
-                    sb.Insert(0, snowflake[a][i].ToString());
-                }
-                if (sb.ToString() == "")
-                    temp[i] = snowflake[i];
-                else
-                {
-                    sb.Insert(0, snowflake[i]);
-                    temp[i] = sb.ToString();
+                    snowflake[i] += snowflake[a][i].ToString();
                 }
             }
-            for (int i = 0; i < temp.Length; i++)
+            int j = 0;
+            int jj = reverse.Length - 1;
+            for (int i = snowflake.Length - 1; i >= 0; i--)
             {
-                StringBuilder sb = new StringBuilder();
-                for (int a = temp[i].Length - 1; a >= 0; a--)
-                    sb.Append(temp[i][a].ToString());
-                sb.Append(temp[i]);
-                temp[i] = sb.ToString();
+                reverse[j] = snowflake[i];
+                reverse[jj] = snowflake[i];
+                j++;
+                jj--;
             }
-            string[] result = new string[temp.Length * 2];
-            int x = -1;
-            for (int i = temp.Length - 1; i >= 0; i--)
-                result[++x] = temp[i];
-            for (int i = 0; i < temp.Length; i++)
-                result[++x] = temp[i];
-            return result;
+            for (int i = 0; i < reverse.Length; i++)
+                reverse[i] = string.Join("", reverse[i].Reverse().Select(x => x.ToString()).ToArray<string>()) + reverse[i];
+            return reverse;
         }
     }
 }
