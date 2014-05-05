@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace _500
 {
@@ -9,6 +10,10 @@ namespace _500
     {
         static void Main(string[] args)
         {
+            Abacus x = new Abacus();
+            string[] a = { "ooooooooo---", "---ooooooooo", "ooooooooo---", "---ooooooooo", "oo---ooooooo", "---ooooooooo" };
+            Console.WriteLine(x.add(a, 6));
+            Console.ReadLine();
         }
     }
 
@@ -16,48 +21,53 @@ namespace _500
     {
         public string[] add(string[] original, int val)
         {
-            string[] result = new string[6];
-            string number = "";
-            int[] num = new int[6];
-            for (int i = 0; i < original.Length; i++)
+            int number = ConvertToInt(original);
+            string n = (number + val).ToString();
+            while (n.Length < 6)
+                n = n.Insert(0, "0");
+            original = ConvertToAbacus(n);
+            return original;
+        }
+
+        public int ConvertToInt(string[] abacus)
+        {
+            int result = 0;
+            int temp = 100000;
+            for (int i = 0; i < abacus.Length; i++)
             {
-                int n = 0;
-                int x = original[i].Length - 1;
-                while (original[i][x] == 'o')
+                string[] abacusTemp = abacus[i].Split('-');
+                for (int a = 1; a < abacusTemp.Length; a++)
                 {
-                    n++;
-                    x--;
+                    if (!string.IsNullOrEmpty(abacusTemp[a]))
+                        result += abacusTemp[a].Length * temp;
                 }
-                number += n.ToString();
-            }
-            StringBuilder newNumber = new StringBuilder((int.Parse(number) + val).ToString());
-            while (newNumber.Length < 6)
-                newNumber.Insert(0, "0");
-            for (int i = 0; i < newNumber.Length; i++)
-                num[i] = int.Parse(newNumber[i].ToString());
-            for (int i = 0; i < num.Length; i++)
-            {
-                StringBuilder sb = new StringBuilder("------------");
-                int x = sb.Length - 1;
-                int xx = 0;
-                int begin = 9 - num[i];
-                while (num[i] > 0)
-                {
-                    sb.Insert(x, "o");
-                    sb.Remove(x + 1, 1);
-                    x--;
-                    num[i]--;
-                }
-                while (begin > 0)
-                {
-                    sb.Insert(xx, "o");
-                    sb.Remove(xx + 1, 1);
-                    xx++;
-                    begin--;
-                }
-                result[i] = sb.ToString();
+                temp /= 10;
             }
             return result;
+        }
+
+        public string[] ConvertToAbacus(string number)
+        {
+            string[] abacus = new string[6];
+            for (int i = 0; i < number.Length; i++)
+            {
+                int n = int.Parse(number[i].ToString());
+                int left = 9 - n;
+                StringBuilder sb = new StringBuilder();
+                while (left > 0)
+                {
+                    sb.Append("o");
+                    left--;
+                }
+                sb.Append("---");
+                while (n > 0)
+                {
+                    sb.Append("o");
+                    n--;
+                }
+                abacus[i] = sb.ToString();
+            }
+            return abacus;
         }
     }
 }
