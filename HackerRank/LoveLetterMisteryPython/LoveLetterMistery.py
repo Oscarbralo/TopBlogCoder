@@ -6,10 +6,7 @@ def main():
 		word = input()
 		j = -1
 		for i in range(int(len(word) / 2)):
-			if abc.index(word[i]) > abc.index(word[j]):
-				result += abc.index(word[i]) - abc.index(word[j])
-			else:
-				result += abc.index(word[j]) - abc.index(word[i])
+			result += abs(abc.index(word[i]) - abc.index(word[j]))
 			j -= 1
 		print(result)
 
