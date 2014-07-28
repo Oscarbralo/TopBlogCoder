@@ -13,13 +13,5 @@ def main():
 			j -= 1
 		print(result)
 
-def isPalindrome(word):
-	j = -1
-	for i in range(int(len(word) / 2)):
-		if word[i] != word[j]:
-			return False
-		j -= 1
-	return True
-
 if __name__ == "__main__":
 	main()
