@@ -14,5 +14,4 @@ def checkio(number):
 
 
 if __name__ == '__main__':
-    #These "asserts" using only for self-checking and not necessary for auto-testing
     checkio(5)
